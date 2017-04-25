@@ -1,0 +1,95 @@
+<p class="h3">Detail Changes in D Inventory</p>
+<div class="row">
+<div class="col-md-7" style="margin-bottom:10px;">
+  <div style="height: 100px;padding-top: 20px;">
+    <div class="btn-group" dropdown>
+      <button id="single-button" type="button" style="width:180px;" class="btn btn-default" dropdownToggle>
+        {{selectedOrganization}} <span class="caret"></span>
+      </button>
+      <ul dropdownMenu role="menu" aria-labelledby="single-button">
+        <li><a class="dropdown-item" (click)="onOrganizationChange(0,'')">None</a></li>
+        <li class="divider dropdown-divider"></li>
+        <li *ngFor="let choice of organizations">
+          <a class="dropdown-item" (click)="onOrganizationChange(choice.organization_ID, choice.organization_Code)">
+            {{choice.organization_Code}}</a>
+        </li>
+      </ul>
+    </div>
+    <div class="btn-group" dropdown>
+      <button id="btn-periods" type="button" style="width:130px;" class="btn btn-default" dropdownToggle>
+        {{selectedPeriod1}} <span class="caret"></span>
+      </button>
+      <ul dropdownMenu role="menu" aria-labelledby="btn-periods" [ngClass]="{'scrollDropDown':isScorllRequired}">
+        <li><a class="dropdown-item" (click)="onPeriod1Change(0)">None</a></li>
+        <li class="divider dropdown-divider"></li>
+        <li *ngFor="let choice of periods">
+          <a class="dropdown-item" (click)="onPeriod1Change(choice)">{{ choice.date }}</a>
+        </li>
+      </ul>
+    </div>
+    <div class="btn-group" dropdown>
+      <button id="btn-periods2" type="button" style="width:130px;" class="btn btn-default" dropdownToggle>
+      {{selectedPeriod2}} <span class="caret"></span>
+      </button>
+      <ul dropdownMenu role="menu" aria-labelledby="btn-periods2" [ngClass]="{'scrollDropDown':isScorllRequired}">
+        <li><a class="dropdown-item" (click)="onPeriod2Change(0)">None</a></li>
+        <li class="divider dropdown-divider"></li>
+        <li *ngFor="let choice of periods">
+          <a class="dropdown-item" (click)="onPeriod2Change(choice)">{{ choice.date }}</a>
+        </li>
+      </ul>
+    </div>
+    <button class="btn btn-primary" (click)="LoadReport()">Load Data Table</button>
+    <button *ngIf="showGrid" class="btn btn-success" (click)="Export()">Export Data to CSV</button>
+    <div class="alert alert-danger" *ngIf="!isFormValid" role="alert">{{message}}</div>
+  </div>
+    <div *ngIf="showGrid" style="width:50%;" [@gridDiv]>
+      <input (keyup)="onQuickFilterChanged($event)" type="text" id="quickFilterInput" 
+        placeholder="Type text to filter..." class="form-control"/>
+    </div>
+</div>
+<div class="col-md-5 col-sm-10" *ngIf="showGrid" [@gridDiv]>
+    <table class="table table-bordered table-striped table-condensed">
+      <thead>
+        <tr>
+          <th>P1-P2</th>
+          <th>Excess Inv $$</th>
+          <th>Excess $$ on Order</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+        <th>All D items</th>
+        <td>{{totalExInvCost | currency:'USD':true}}</td>
+        <td>{{totalExCostOnOrder | currency:'USD':true}}</td>
+        </tr>
+        <tr>
+        <th>All D items with no annual usage</th>
+        <td>{{totalExInvCostNoAnnualUsage | currency:'USD':true}}</td>
+        <td>{{totalExCostOnOrderNoAnnualUsage | currency:'USD':true}}</td>
+        </tr>
+        <tr>
+        <th>All D items excluding "D USE"</th>
+        <td>{{totalExInvCostExcludeD | currency:'USD':true}}</td>
+        <td>{{totalExCostOnOrderExcludeD | currency:'USD':true}}</td>
+        </tr>
+      </tbody>
+    </table>
+    <div>
+      <span style="font-weight:bold;">P1-P2 Future Planned Orders Excess:</span> {{totalFuturePlannedOrdersExcess | currency:'USD':true}}
+    </div>
+  </div>
+</div>
+<div *ngIf="showGrid" [@gridDiv] [ngBusy]="busy" style="position: relative">
+  <ag-grid-ng2 #agGrid style="width: 100%; height: 450px;" class="ag-fresh"
+                  [gridOptions]="gridOptions" 
+                  [rowData]="rowData"
+                  enableColResize                  
+                  (modelUpdated)="onModelUpdated()"
+                  (gridReady)="onReady($event)">
+  </ag-grid-ng2>
+  <div>
+      <b>Records:</b>
+      {{rowCount}}
+  </div>
+</div>

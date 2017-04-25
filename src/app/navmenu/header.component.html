@@ -1,0 +1,30 @@
+<div id="header">
+    <div id="logo1"></div>
+    <div id="logo2"></div>
+    <div style="top: 40px;text-align: center;">
+        <span class="ProjectTitle">Excess Obsolete Inventory Report</span>
+        <div style="color: white; font-size: 1em; font-style: italic;">
+            <p>Fisher Intranet Application</p>
+        </div>
+    </div>
+    <div style="margin-top: 1px;" >
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                    <a class="navbar-brand">EOI Report</a>
+                </div>
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        <li routerLinkActive="active"><a [routerLink]="['/summary','/']">Summary</a></li>
+                        <li routerLinkActive="active"><a [routerLink]="['/detail']">Detail</a></li>
+                        <li routerLinkActive="active"><a [routerLink]="['/export']">Raw Data</a></li>
+                        <!--<li routerLinkActive="active"><a [routerLink]="['/graph']">Data Graph</a></li>
+                        <li routerLinkActive="active"><a [routerLink]="['/demo']">Demo Table</a></li>-->
+                    </ul>
+                </div>
+            </div><!-- /.container-fluid -->
+        </nav>
+    </div>
+</div>

@@ -1,0 +1,51 @@
+<p class="h3">Summary by Periods</p>
+<div class="row">
+  <div class="col-md-2 col-xs-4">
+    <div class="btn-group" dropdown>
+      <button id="single-button" type="button" style="width:180px;" class="btn btn-default" dropdownToggle>
+        {{selectedOrganization}} <span class="caret"></span>
+      </button>
+      <ul dropdownMenu role="menu" aria-labelledby="single-button">
+        <li><a class="dropdown-item" (click)="onOrganizationChange(0,'')">None</a></li>
+        <li class="divider dropdown-divider"></li>
+        <li *ngFor="let choice of organizations">
+          <a class="dropdown-item" (click)="onOrganizationChange(choice.organization_ID, choice.organization_Code)">
+            {{choice.organization_Code}}</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div *ngIf="showGrid" class="col-md-2 col-xs-4">
+      <div class="checkbox">
+        <label>
+          <input type="checkbox" name="isShowChart" 
+          (click)="showHideChart()"> View Graph
+        </label>
+      </div>
+    </div>
+  <div *ngIf="showGrid" class="col-md-6 col-xs-2" style="text-align: right">
+    <button class="btn btn-success" (click)="Export()">Export Data to CSV</button>
+  </div>
+</div>
+<br>
+<div class="row" *ngIf="isShowChart&&showGrid">
+  <div [@chartDiv]>
+    <chart style="height: 360px;" class="col-md-11 col-xs-12" [options]="chart1Options"></chart>
+    <!--<chart style="height: 260px;" class="col-md-11 col-xs-12" [options]="chart2Options"></chart>-->
+  </div>
+</div>
+<div *ngIf="showGrid" [@gridDiv] [ngBusy]="busy">
+  <ag-grid-ng2 #agGrid style="width: 99%; height: 450px;" class="ag-fresh"
+                  [gridOptions]="gridOptions" 
+                  [rowData]="rowData"
+                  enableSorting
+                  enableFilter
+                  enableColResize                  
+                  (modelUpdated)="onModelUpdated()"
+                  (gridReady)="onReady($event)">
+  </ag-grid-ng2>
+  <div>
+      <b>Records:</b>
+      {{rowCount}}
+  </div>
+</div>
